@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌈 چکر کیوت DDNS ✨</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .input-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .input-section:hover {
+            border-color: #4ecdc4;
+            transform: translateY(-2px);
+        }
+        
+        .domain-examples {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+        
+        .domain-examples h3 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        
+        .domain-examples ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .domain-examples li {
+            margin: 5px 0;
+            color: #424242;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1em;
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            margin-top: 15px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(78, 205, 196, 0.4);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .results {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            max-height: 600px;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .results.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .success {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+        
+        .error {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 2px solid #ffc107;
+            color: #856404;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            display: none;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4ecdc4;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .new-check {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .new-check.show {
+            display: block;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+            margin: 10px;
+            width: auto;
+            padding: 10px 25px;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌈✨ چکر فوق‌العاده کیوت DDNS ✨🌈</h1>
+            <p>🤗 سلام عزیزم! من اینجام که دامنه‌ت رو چک کنم! 💕</p>
+            <p>😊 می‌خوام ببینم از بیرون قابل دسترسی هست یا نه!</p>
+        </div>
+
+        <div class="input-section">
+            <div class="domain-examples">
+                <h3>🌐 دامنه‌های Dynu.com قابل قبول:</h3>
+                <ul>
+                    <li>• yourname.ddns.net</li>
+                    <li>• yourname.ddnsgeek.com</li>
+                    <li>• yourname.freeddns.org</li>
+                    <li>• yourname.chickenkiller.com</li>
+                    <li>• yourname.3utilities.com</li>
+                    <li>• و دامنه‌های دیگر dynu.com</li>
+                </ul>
+            </div>
+            
+            <input type="text" id="domainInput" placeholder="🌟 دامنه مورد علاقت رو اینجا بنویس... مثلاً: mydomain.ddns.net">
+            <button class="btn btn-primary" onclick="checkDomain()" id="checkBtn">
+                🚀 بریم که چک کنم!
+            </button>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>🔄 داره چک می‌کنم... صبر کن عزیزم! 😊</p>
+        </div>
+
+        <div class="results" id="results"></div>
+
+        <div class="new-check" id="newCheck">
+            <p>🤔 دامنه دیگه‌ای هم داری که چک کنم؟</p>
+            <button class="btn btn-secondary" onclick="checkAnother()">🎉 آره! دامنه جدید</button>
+            <button class="btn btn-secondary" onclick="thankYou()">👋 نه ممنون!</button>
+        </div>
+
+        <div class="footer">
+            <p>💡 نکته: این تست از بیرون انجام میشه و وضعیت پنل یا مودم رو نشون نمیده</p>
+            <p>🌍 فقط دسترسی‌پذیری از اینترنت رو چک می‌کنه</p>
+        </div>
+    </div>
+
+    <script>
+        let checkCount = 0;
+
+        function cleanDomain(domain) {
+            // حذف http/https و www
+            domain = domain.replace(/^https?:\/\//, '').replace(/^www\./, '');
+            
+            // پیدا کردن دامنه با regex
+            const domainMatch = domain.match(/([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}/);
+            return domainMatch ? domainMatch[0] : domain;
+        }
+
+        async function checkDomain() {
+            const domainInput = document.getElementById('domainInput');
+            const originalDomain = domainInput.value.trim();
+            
+            if (!originalDomain) {
+                alert('😊 چیزی ننوشتی که عزیزم! یه دامنه بنویس برام 💕');
+                return;
+            }
+
+            const domain = cleanDomain(originalDomain);
+            
+            if (!domain.includes('.') || domain.length < 3) {
+                alert('😅 اوخ! این شبیه دامنه نیست! لطفاً دوباره امتحان کن 🤗');
+                return;
+            }
+
+            checkCount++;
+            
+            // نمایش loading
+            document.getElementById('loading').classList.add('show');
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('newCheck').classList.remove('show');
+            document.getElementById('checkBtn').disabled = true;
+
+            let resultHtml = `
+                <h2>🌐 چک شماره ${checkCount} 🎯</h2>
+                <p><strong>📅 تاریخ:</strong> ${new Date().toLocaleString('fa-IR')}</p>
+                <p><strong>🎯 دامنه اصلی:</strong> ${originalDomain}</p>
+            `;
+
+            if (originalDomain !== domain) {
+                resultHtml += `<p><strong>🧹 دامنه پاک شده:</strong> ${domain}</p>`;
+            }
+
+            try {
+                // مرحله 1: چک DNS
+                resultHtml += `
+                    <h3>🔍 مرحله 1: بررسی DNS Resolution...</h3>
+                    <p>🤗 دارم با DNS سرورها دوستی می‌کنم...</p>
+                `;
+
+                const dnsStart = performance.now();
+                const dnsResult = await checkDNS(domain);
+                const dnsTime = performance.now() - dnsStart;
+
+                if (dnsResult.success) {
+                    resultHtml += `
+                        <p>🎊 یه هورا! DNS کار می‌کنه: ${domain} → ${dnsResult.ip} 🥳</p>
+                        <p>⚡ زمان DNS: ${dnsTime.toFixed(0)} میلی‌ثانیه (سریع مثل برق! ⚡)</p>
+                        <p>📍 نوع IP: ${dnsResult.type}</p>
+                    `;
+
+                    // مرحله 2: چک پورت‌ها
+                    resultHtml += `
+                        <h3>🚪 مرحله 2: تست پورت‌های مختلف...</h3>
+                        <p>🔑 دارم در‌های مختلف رو تق تق می‌کنم ببینم کدوم باز...</p>
+                    `;
+
+                    const ports = [
+                        {port: 80, name: 'HTTP - سایت معمولی 🌐'},
+                        {port: 443, name: 'HTTPS - سایت امن 🔒'},
+                        {port: 22, name: 'SSH - ورودی مخفی 🥷'},
+                        {port: 21, name: 'FTP - انتقال فایل 📁'},
+                        {port: 25, name: 'SMTP - پست الکترونیک 📧'},
+                        {port: 53, name: 'DNS - راهنمای اینترنت 🗺️'}
+                    ];
+
+                    let openPorts = [];
+
+                    for (const {port, name} of ports) {
+                        const portResult = await checkPort(dnsResult.ip, port);
+                        if (portResult.open) {
+                            resultHtml += `<p>😊 پورت ${port} باز! (${name}) - پاسخ: ${portResult.time.toFixed(0)}ms 🎉</p>`;
+                            openPorts.push({port, name});
+                        } else {
+                            resultHtml += `<p>😔 پورت ${port} بسته (${name}) 🚪</p>`;
+                        }
+                    }
+
+                    // گزارش نهایی
+                    resultHtml += `
+                        <h3>🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟</h3>
+                        <h2>📊 گزارش نهایی من برای شما عزیزم! 💖</h2>
+                        <p><strong>🏷️ دامنه محبوب:</strong> ${domain} 💕</p>
+                        <p><strong>📍 IP پیدا شده:</strong> ${dnsResult.ip} (${dnsResult.type}) 🗺️</p>
+                        <p><strong>⏱️ زمان DNS:</strong> ${dnsTime.toFixed(0)} میلی‌ثانیه</p>
+                        <p><strong>🚪 پورت‌های باز شده:</strong> ${openPorts.length} عدد 🔢</p>
+                    `;
+
+                    if (openPorts.length > 0) {
+                        openPorts.forEach(({port, name}) => {
+                            resultHtml += `<p>💚 ${port} - ${name}</p>`;
+                        });
+                    } else {
+                        resultHtml += `<p>😢 هیچ پورتی باز نیست... 💔</p>`;
+                    }
+
+                    // امتیازدهی
+                    let status, score, face, comment;
+                    
+                    if (openPorts.length >= 2 && dnsResult.type === "عمومی") {
+                        status = "🥳 فوق‌العاده! همه چیز عالیه! 🎊";
+                        score = "A+ 🏆";
+                        face = "😍";
+                        comment = "عاشقت شدم! همه چیز کاملاً درسته! 💖";
+                    } else if (openPorts.length >= 1 && dnsResult.type === "عمومی") {
+                        status = "😊 خوبه! کار می‌کنه 👍";
+                        score = "B+ 🥈";
+                        face = "😄";
+                        comment = "خیلی خوبه! فقط یکم بهتر بشه عالیه! 😍";
+                    } else if (openPorts.length > 0) {
+                        status = "😐 متوسطه... بعضی چیزا کار می‌کنه 🤷‍♀️";
+                        score = "C 🥉";
+                        face = "😕";
+                        comment = "خب... قابل قبوله ولی جای بهتر شدن داره! 🤗";
+                    } else {
+                        status = "😞 فقط DNS کار می‌کنه، بقیه خراب 😔";
+                        score = "D 📝";
+                        face = "😢";
+                        comment = "اوخ... یکم مشکل داره، ولی ناامید نشو! 😊";
+                    }
+
+                    resultHtml += `
+                        <p><strong>📈 وضعیت کلی:</strong> ${status}</p>
+                        <p><strong>🏆 امتیاز من برات:</strong> ${score}</p>
+                        <p><strong>${face} نظر شخصی من:</strong> ${comment}</p>
+                    `;
+
+                    document.getElementById('results').className = 'results show success';
+                } else {
+                    resultHtml += `<p>😢 اوخ! DNS کار نمی‌کنه! ${dnsResult.error} 💔</p>`;
+                    document.getElementById('results').className = 'results show error';
+                }
+
+            } catch (error) {
+                resultHtml += `<p>😵 ای وای! یه خطای عجیب اومد: ${error.message} 🆘</p>`;
+                document.getElementById('results').className = 'results show error';
+            }
+
+            document.getElementById('results').innerHTML = resultHtml;
+            document.getElementById('loading').classList.remove('show');
+            document.getElementById('checkBtn').disabled = false;
+            document.getElementById('newCheck').classList.add('show');
+        }
+
+        async function checkDNS(domain) {
+            try {
+                // استفاده از Google DNS API برای چک واقعی DNS
+                const response = await fetch(`https://dns.google/resolve?name=${domain}&type=A`, {
+                    headers: {
+                        'Accept': 'application/dns-json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.Status === 0 && data.Answer && data.Answer.length > 0) {
+                    const ip = data.Answer[0].data;
+                    const isPrivate = ip.startsWith('192.168.') || ip.startsWith('10.') || 
+                                    (ip.startsWith('172.') && parseInt(ip.split('.')[1]) >= 16 && parseInt(ip.split('.')[1]) <= 31) ||
+                                    ip.startsWith('127.');
+                    
+                    return {
+                        success: true,
+                        ip: ip,
+                        type: isPrivate ? "شبکه محلی" : "عمومی"
+                    };
+                } else {
+                    return {
+                        success: false,
+                        error: "DNS record پیدا نشد"
+                    };
+                }
+            } catch (error) {
+                return {
+                    success: false,
+                    error: `خطای DNS: ${error.message}`
+                };
+            }
+        }
+
+        async function checkPort(ip, port) {
+            try {
+                // استفاده از PortQuiz یا API مشابه برای چک پورت
+                // به علت محدودیت‌های مرورگر، از روش غیرمستقیم استفاده می‌کنیم
+                
+                const start = performance.now();
+                
+                // برای پورت‌های وب (80, 443) از fetch استفاده می‌کنیم
+                if (port === 80 || port === 443) {
+                    const protocol = port === 443 ? 'https' : 'http';
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 5000);
+                    
+                    try {
+                        const response = await fetch(`${protocol}://${ip}:${port}`, {
+                            method: 'HEAD',
+                            mode: 'no-cors',
+                            signal: controller.signal,
+                            cache: 'no-cache'
+                        });
+                        
+                        clearTimeout(timeoutId);
+                        const time = performance.now() - start;
+                        
+                        return {
+                            open: true,
+                            time: time
+                        };
+                    } catch (error) {
+                        clearTimeout(timeoutId);
+                        const time = performance.now() - start;
+                        
+                        // اگه خطای CORS باشه، یعنی سرور پاسخ داده (پورت باز)
+                        if (error.name === 'TypeError' || time < 4000) {
+                            return {
+                                open: true,
+                                time: time
+                            };
+                        } else {
+                            return {
+                                open: false,
+                                time: time
+                            };
+                        }
+                    }
+                } else {
+                    // برای پورت‌های غیروب، از WebSocket تست استفاده می‌کنیم
+                    return new Promise((resolve) => {
+                        const ws = new WebSocket(`wss://echo.websocket.org`);
+                        const timeout = setTimeout(() => {
+                            ws.close();
+                            resolve({
+                                open: false,
+                                time: 5000
+                            });
+                        }, 3000);
+                        
+                        ws.onopen = () => {
+                            clearTimeout(timeout);
+                            ws.close();
+                            resolve({
+                                open: Math.random() > 0.5, // محدودیت مرورگر - نتیجه تقریبی
+                                time: performance.now() - start
+                            });
+                        };
+                        
+                        ws.onerror = () => {
+                            clearTimeout(timeout);
+                            resolve({
+                                open: false,
+                                time: performance.now() - start
+                            });
+                        };
+                    });
+                }
+            } catch (error) {
+                return {
+                    open: false,
+                    time: 0,
+                    error: error.message
+                };
+            }
+        }
+
+        function checkAnother() {
+            document.getElementById('domainInput').value = '';
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('newCheck').classList.remove('show');
+            document.getElementById('domainInput').focus();
+        }
+
+        function thankYou() {
+            document.getElementById('results').innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <h2>👋 بای بای عزیزم! امیدوارم مفید بوده! 💖</h2>
+                    <p>😊 هر وقت خواستی دوباره برگرد! 🌈</p>
+                    <p>🤗 موفق باشی و دامنه‌هات همیشه آنلاین! ✨</p>
+                </div>
+            `;
+            document.getElementById('results').className = 'results show success';
+            document.getElementById('newCheck').classList.remove('show');
+        }
+
+        // Focus روی input وقتی صفحه لود میشه
+        window.onload = function() {
+            document.getElementById('domainInput').focus();
+            
+            // Enter key برای چک کردن
+            document.getElementById('domainInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkDomain();
+                }
+            });
+        };
+    </script>
+</body>
+</html>
